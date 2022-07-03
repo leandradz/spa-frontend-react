@@ -27,3 +27,6 @@ export const Centralize = styled.div`
   text-align: center;
   font-size: 24px;
 `
+export const Card = styled.div`
+  width: 150px;
+`
