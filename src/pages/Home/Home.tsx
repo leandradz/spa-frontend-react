@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import {
   IconFavoriteOne,
   IconHero,
-  IconToggleOff,
 } from '../../components/Icons'
 import { Logo } from '../../components/Logo'
 import { useGetData } from '../../service/api'
@@ -16,6 +15,7 @@ import {
 } from './styles'
 import { debounce } from 'lodash'
 import { SearchBar } from '../../components/SearchBar/SearchBar'
+import { Toggle } from '../../components/Toggle/Toggle'
 
 export const Home = () => {
   const [data, setData] = useState(undefined)
@@ -26,15 +26,18 @@ export const Home = () => {
     setSearchValue(value)
   }, 1000)
 
+  const [isSorterActive, setIsSorterActive] = useState(true)
+  const orderByName = isSorterActive ? '&orderBy=name' : '&orderBy=-name'
+
   useEffect(() => {
     ;(async () => {
       const promise = new Promise((resolve) =>
-        resolve(getCharacters(searchValue)),
+        resolve(getCharacters(orderByName, searchValue)),
       )
-      const result: any = await promise
+      const result = await promise
       setData(result)
     })()
-  }, [searchValue])
+  }, [searchValue, isSorterActive])
 
   return (
     <Container>
@@ -56,7 +59,10 @@ export const Home = () => {
           <IconHero />
           <Text isColorRed>Ordenar por nome - A/Z</Text>
 
-          <IconToggleOff />
+          <Toggle
+            isActive={isSorterActive}
+            setIsSorterActive={setIsSorterActive}
+          />
         </div>
 
         <div>

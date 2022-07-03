@@ -8,18 +8,18 @@ export const useGetData = () => {
       process.env.REACT_APP_PUBLIC_KEY
   );
 
-  const getCharacters = async (searchValue: string) => {
+  const getCharacters = async (orderByName: string, searchValue: string) => {
     const queryString = searchValue != '' ? `&name=${searchValue}` : ''
 
     const result = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/characters?ts=${timestamp}&apikey=${process.env.REACT_APP_PUBLIC_KEY}&hash=${hash}${queryString}`
+      `${process.env.REACT_APP_BASE_URL}/characters?ts=${timestamp}&apikey=${process.env.REACT_APP_PUBLIC_KEY}&hash=${hash}${queryString}${orderByName}`,
     )
       .then((response) => response.json())
       .then((resp) => resp)
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
 
-    return result;
-  };
+    return result
+  }
 
   return {
     getCharacters,
