@@ -21,7 +21,7 @@ export const Card = ({
       <Link to={`hero/${character.id}`}>
         <img
           src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-          alt={`${character.name}`}
+          alt={character.name}
           width="200px"
           height="200px"
         />
