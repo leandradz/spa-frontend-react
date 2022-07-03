@@ -8,9 +8,11 @@ export const useGetData = () => {
       process.env.REACT_APP_PUBLIC_KEY
   );
 
-  const getCharacters = async () => {
+  const getCharacters = async (searchValue: string) => {
+    const queryString = searchValue != '' ? `&name=${searchValue}` : ''
+
     const result = await fetch(
-      `${process.env.REACT_APP_BASE_URL}/characters?ts=${timestamp}&apikey=${process.env.REACT_APP_PUBLIC_KEY}&hash=${hash}`
+      `${process.env.REACT_APP_BASE_URL}/characters?ts=${timestamp}&apikey=${process.env.REACT_APP_PUBLIC_KEY}&hash=${hash}${queryString}`
     )
       .then((response) => response.json())
       .then((resp) => resp)

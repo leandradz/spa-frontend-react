@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 import {
   IconFavoriteOne,
   IconHero,
   IconToggleOff,
-} from "../../components/Icons";
-import { Logo } from "../../components/Logo";
-import { useGetData } from "../../service/api";
+} from '../../components/Icons'
+import { Logo } from '../../components/Logo'
+import { useGetData } from '../../service/api'
 import {
   CardList,
   Centralize,
@@ -13,19 +13,28 @@ import {
   Header,
   HeaderList,
   Text,
-} from "./styles";
+} from './styles'
+import { debounce } from 'lodash'
+import { SearchBar } from '../../components/SearchBar/SearchBar'
 
 export const Home = () => {
-  const [data, setData] = useState(undefined);
-  const { getCharacters } = useGetData();
+  const [data, setData] = useState(undefined)
+  const { getCharacters } = useGetData()
+
+  const [searchValue, setSearchValue] = useState('')
+  const debouncedHandleSearch = debounce((value: string) => {
+    setSearchValue(value)
+  }, 1000)
 
   useEffect(() => {
-    (async () => {
-      const promise = new Promise((resolve) => resolve(getCharacters()));
-      const result: any = await promise;
-      setData(result);
-    })();
-  }, []);
+    ;(async () => {
+      const promise = new Promise((resolve) =>
+        resolve(getCharacters(searchValue)),
+      )
+      const result: any = await promise
+      setData(result)
+    })()
+  }, [searchValue])
 
   return (
     <Container>
@@ -38,7 +47,8 @@ export const Home = () => {
         </Text>
       </Header>
 
-      <input placeholder="Procurar por heróis" />
+      <SearchBar setSearchValue={debouncedHandleSearch} isRed isLarge />
+
       <HeaderList>
         <Text>Encontrados X heróis</Text>
 
@@ -57,5 +67,5 @@ export const Home = () => {
 
       {!!data ? <CardList></CardList> : <Centralize>carregando...</Centralize>}
     </Container>
-  );
-};
+  )
+}
