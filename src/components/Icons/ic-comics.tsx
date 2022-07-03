@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 export const IconComics = () => (
   <svg
     width="24px"
