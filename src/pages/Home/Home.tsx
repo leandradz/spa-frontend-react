@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IconFavoriteOne,
   IconHero,
   IconToggleOff,
 } from "../../components/Icons";
 import { Logo } from "../../components/Logo";
+import { useGetData } from "../../service/api";
 import {
   CardList,
   Centralize,
@@ -16,6 +17,15 @@ import {
 
 export const Home = () => {
   const [data, setData] = useState(undefined);
+  const { getCharacters } = useGetData();
+
+  useEffect(() => {
+    (async () => {
+      const promise = new Promise((resolve) => resolve(getCharacters()));
+      const result: any = await promise;
+      setData(result);
+    })();
+  }, []);
 
   return (
     <Container>
