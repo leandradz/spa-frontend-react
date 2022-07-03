@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2em;
 `
 
 export const Card = styled.div`
