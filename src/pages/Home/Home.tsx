@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  IconFavoriteOne,
-  IconHero,
-} from '../../components/Icons'
+import { IconHero } from '../../components/Icons'
 import { Logo } from '../../components/Logo'
 import { useGetData } from '../../service/api'
 import {
@@ -16,10 +13,18 @@ import {
 import { debounce } from 'lodash'
 import { SearchBar } from '../../components/SearchBar/SearchBar'
 import { Toggle } from '../../components/Toggle/Toggle'
+import { Card } from '../../components/Card/Card'
+import { CharactersDTO } from '../../service/interface'
+import { ButtonFavorite } from '../../components/ButtonFavorite/ButtonFavorite'
+import { handleFavoriteCharacters } from '../../utils/favorite'
 
 export const Home = () => {
-  const [data, setData] = useState(undefined)
   const { getCharacters } = useGetData()
+  const [data, setData] = useState(undefined)
+
+  const [isFilterActive, setIsFilterActive] = useState(false)
+  const favoriteList = JSON.parse(localStorage.getItem('favorite')) || []
+  const dataList = isFilterActive ? favoriteList : data?.data?.results
 
   const [searchValue, setSearchValue] = useState('')
   const debouncedHandleSearch = debounce((value: string) => {
@@ -28,6 +33,16 @@ export const Home = () => {
 
   const [isSorterActive, setIsSorterActive] = useState(true)
   const orderByName = isSorterActive ? '&orderBy=name' : '&orderBy=-name'
+
+  const handleSaveHero = (character: CharactersDTO) => {
+    localStorage.setItem('character', JSON.stringify(character))
+  }
+
+  const [hasNewFavorite, setHasNewFavorite] = useState(false)
+  const handleNewFavorite = (character: CharactersDTO) => {
+    setHasNewFavorite(!hasNewFavorite)
+    handleFavoriteCharacters(character)
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -66,12 +81,29 @@ export const Home = () => {
         </div>
 
         <div>
-          <IconFavoriteOne />
+          <ButtonFavorite
+            isFavorite={isFilterActive}
+            setIsActive={setIsFilterActive}
+            isFilter
+          />
           <Text isColorRed>Somente os favoritos</Text>
         </div>
       </HeaderList>
 
-      {!!data ? <CardList></CardList> : <Centralize>carregando...</Centralize>}
+      {!!data ? (
+        <CardList>
+          {dataList?.map((character: CharactersDTO) => (
+            <Card
+              character={character}
+              handleSaveHero={handleSaveHero}
+              favoriteList={favoriteList}
+              handleNewFavorite={handleNewFavorite}
+            />
+          ))}
+        </CardList>
+      ) : (
+        <Centralize>carregando...</Centralize>
+      )}
     </Container>
   )
 }
