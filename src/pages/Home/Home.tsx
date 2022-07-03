@@ -68,7 +68,7 @@ export const Home = () => {
       <SearchBar setSearchValue={debouncedHandleSearch} isRed isLarge />
 
       <HeaderList>
-        <Text>Encontrados X heróis</Text>
+        <Text>Encontrados {data?.data?.total} heróis</Text>
 
         <div>
           <IconHero />
@@ -90,7 +90,7 @@ export const Home = () => {
         </div>
       </HeaderList>
 
-      {!!data ? (
+      {!!dataList ? (
         <CardList>
           {dataList?.map((character: CharactersDTO) => (
             <Card
